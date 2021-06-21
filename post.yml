@@ -1,0 +1,11 @@
+layout: post
+current: post
+cover: assets/images/personal-allowance.png
+navigation: True
+title: Funding UBI by eliminating the personal allowance
+date: 2021-06-21
+tags: [uk,ubi]
+subclass: 'post'
+author: ines
+excerpt: A budget-neutral plan exchanging tax exemption for universal basic income
+class: post-template
