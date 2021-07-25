@@ -1,4 +1,4 @@
-name: reponame
+name: personal-allowance
 dependencies:
 - python
 - plotly
@@ -7,4 +7,5 @@ dependencies:
 - pip
 - pip:
   - jupyter-book
-  - "git+https://github.com/PSLmodels/microdf.git"
+  - "git+https://github.com/PSLmodels/openfisca-uk"
+  - "git+https://github.com/PSLmodels/microdf"
