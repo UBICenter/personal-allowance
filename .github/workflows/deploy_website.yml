@@ -1,0 +1,40 @@
+name: Submit website PR
+on: [push]
+jobs:
+  build:
+    if: github.repository == 'ubicenter/personal-allowance'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: personal-allowance
+          environment-file: environment.yml
+          python-version: 3.7
+          auto-activate-base: false
+
+      - name: Build
+        run: |
+          git config --global user.name "ubicenter[bot]"
+          git config --global user.email "contact@ubicenter.org"
+          cd ..
+          git clone https://github.com/ubicenter/ubicenter.org
+          cd ubicenter.org
+          git remote add dest https://ubicenter-post-bot:$UBICENTER_POST_BOT_TOKEN@github.com/ubicenter-post-bot/ubicenter.org
+          git remote add upstream https://ubicenter-post-bot:$UBICENTER_POST_BOT_TOKEN@github.com/ubicenter/ubicenter.org
+          git checkout -b ${POST_NAME}
+          cd ..
+          cp ./personal-allowance/website/cover_image.png ./ubicenter.org/assets/images/${POST_NAME}.png
+          python ./ubicenter.org/post_from_notebook.py personal-allowance/website/post.ipynb personal-allowance/website/metadata.yml --output-md ubicenter.org/_posts/${POST_NAME}.md --output-folder ubicenter.org/assets/markdown_assets/${POST_NAME}/
+          cd ubicenter.org
+          git add .
+          git commit -m "Add new post"
+          git push dest ${POST_NAME} --force
+        env:
+          UBICENTER_POST_BOT_TOKEN: ${{secrets.UBICENTER_POST_BOT_TOKEN}}
+          POST_NAME: personal-allowance
